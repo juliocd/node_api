@@ -18,10 +18,11 @@ app.use(bodyParser.json());
 
 //Create database connection
 var con = mysql.createConnection({
-    host: "127.0.0.1",
-    user: "node_user",
-    password: "password",
-    database: "api_user"
+    host: "sql9.freemysqlhosting.net",
+    user: "sql9208893",
+    password: "d69M8DDdpz",
+    database: "sql9208893",
+    port: 3306
 });
 
 //Connect to database
@@ -32,10 +33,10 @@ con.connect(function(err) {
     //     if (err) throw err;
     //     console.log("Database OK!");
     // });
-    // con.query("CREATE TABLE IF NOT EXISTS users ( id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50) NOT NULL, last_name VARCHAR(50) NOT NULL, age INT(3), gender VARCHAR(1), username VARCHAR(50) NOT NULL, password VARCHAR(50) NOT NULL);", function (err, result) {
-    //     if (err) throw err;
-    //     console.log("User table OK!");
-    // });
+     con.query("CREATE TABLE IF NOT EXISTS users ( id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50) NOT NULL, last_name VARCHAR(50) NOT NULL, age INT(3), gender VARCHAR(1), username VARCHAR(50) NOT NULL, password VARCHAR(50) NOT NULL);", function (err, result) {
+         if (err) throw err;
+         console.log("User table OK!");
+     });
 });
 
 app.post('/user', function(req, res) {
