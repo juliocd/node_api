@@ -11,7 +11,7 @@ function saveUser(){
     };
 
     $.ajax({
-        url: 'https://apinodeusers.herokuapp.com:20761/user',
+        url: 'https://apinodeusers.herokuapp.com/user',
         data: JSON.stringify(user),
         error: function(error) {
             alert("Error saving user.")
