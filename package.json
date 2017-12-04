@@ -1,0 +1,32 @@
+{
+  "name": "node-api",
+  "version": "1.0.0",
+  "description": "First api",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "lodash": "^4.17.4",
+    "mysql": "^2.15.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "start_p"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juliocd/node_api.git"
+  },
+  "keywords": [
+    "node",
+    "api",
+    "express",
+    "mysql"
+  ],
+  "author": "Julio Diaz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/juliocd/node_api/issues"
+  },
+  "homepage": "https://github.com/juliocd/node_api#readme"
+}
