@@ -12,7 +12,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "Make test",
-    "start": "server/server.js"
+    "start": "server.js"
   },
   "repository": {
     "type": "git",
