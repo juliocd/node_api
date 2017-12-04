@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var fs = require('fs');
@@ -33,10 +35,10 @@ con.connect(function(err) {
     //     if (err) throw err;
     //     console.log("Database OK!");
     // });
-     con.query("CREATE TABLE IF NOT EXISTS users ( id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50) NOT NULL, last_name VARCHAR(50) NOT NULL, age INT(3), gender VARCHAR(1), username VARCHAR(50) NOT NULL, password VARCHAR(50) NOT NULL);", function (err, result) {
+     /*con.query("CREATE TABLE IF NOT EXISTS users ( id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50) NOT NULL, last_name VARCHAR(50) NOT NULL, age INT(3), gender VARCHAR(1), username VARCHAR(50) NOT NULL, password VARCHAR(50) NOT NULL);", function (err, result) {
          if (err) throw err;
          console.log("User table OK!");
-     });
+     });*/
 });
 
 app.post('/user', function(req, res) {
