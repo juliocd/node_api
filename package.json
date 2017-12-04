@@ -11,7 +11,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "start_p"
+    "test": "Make test",
+    "start": "server/server.js"
   },
   "repository": {
     "type": "git",
