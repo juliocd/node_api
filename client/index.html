@@ -1,20 +1,105 @@
-<html>
-    <head>
-        <title>Node API</title>
-        <link rel="stylesheet" type="text/css" href="styles.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="index.js"></script>
-    </head>
-    <body>
-        <h2>Users</h2>
-        <h3>Personal Data</h3>
-        <Label class="Subtitle">Name</Label><input class="Default-Input" type="text" id="name"/><br/>
-        <Label class="Subtitle" >Lastname</Label><input class="Default-Input" type="text" id="last_name"/><br/>
-        <Label class="Subtitle">Age</Label><input class="Default-Input" type="number" id="age"/><br/>
-        <Label class="Subtitle">Gender</Label><select class="Default-Select" id="gender"><option value="m">Male</option><option val="f">Female</option></select></br/>
-        <h3>Login Data</h3>
-        <Label class="Subtitle">Username</Label><input class="Default-Input" type="text" id="username"/><br/>
-        <Label class="Subtitle" >Password</Label><input class="Default-Input" type="password" id="password"/><br/>
-        <button id="saveUserBtn" class="Default-Button">Sign up</button>
-    </body>
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="dimog-icon.ico">
+
+    <title>Dimog</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    
+    <!-- Custom styles for this template -->
+    <link href="narrow-jumbotron.css" rel="stylesheet" >
+
+    <!-- JS files-->
+    <script src="index.js"></script>
+
+  </head>
+
+  <body>
+
+    <div class="container">
+      <header class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills float-right" id="pills-tab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="pills-home-tab" data-toggle="pill" role="tab" aria-controls="pills-home" aria-selected="true" href="#home">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="btn btn-link dropdown-toggle" style="outline: none;" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">Sign in</a>
+                <form class="dropdown-menu px-4 py-3" style="width: max-content;" id="signInForm" >
+                  <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" placeholder="email@example.com" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Password" required>
+                  </div>
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input type="checkbox" class="form-check-input">
+                      Remember me
+                    </label>
+                  </div>
+                  <button id="signInBtn" class="btn btn-primary">Sign in</button>
+                </form>
+              </li>
+            <li class="nav-item">
+              <a class="nav-link" id="profile-tab" data-toggle="tab" href="#api" role="tab" aria-controls="profile" aria-selected="false">API</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="about-tab" data-toggle="tab" href="#about" role="tab" aria-controls="about" aria-selected="false">About</a>
+            </li>
+          </ul>
+        </nav>
+        <h3 class="text-muted">Dimog</h3>
+      </header>
+
+      <main role="main" class="tab-content" id="pills-tabContent">
+          <div class="tab-pane fade show active" id="home" role="tabpanel">
+            <div class="jumbotron">
+              <h1 class="display-3">Api cloud solutions</h1>
+              <p class="lead">NodeJS API for all your Cloud Solutions. Quick, Easy and Powerfull.</p>
+              <p><a class="btn btn-lg btn-success" href="sign_up.html" role="button">Sign up today</a></p>
+            </div>
+
+            <div class="row marketing">
+              <div class="col-lg-6">
+                <h4>NodeJS</h4>
+                <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+
+                <h4>Heroku</h4>
+                <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+              </div>
+
+              <div class="col-lg-6">
+                <h4>MySQL</h4>
+                <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+              </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="api" role="tabpanel" aria-labelledby="profile-tab">
+          <p>hfdsnfjkndsafsdf</p>
+        </div>
+        <div class="tab-pane fade" id="about" role="tabpanel" aria-labelledby="about-tab">
+          <p>WERWERWEFSDF</p>
+        </div>
+
+      </main>
+
+      <footer class="footer">
+        <p>&copy; Dimog 2017 All Copyright</p>
+      </footer>
+
+    </div> <!-- /container -->
+  </body>
 </html>
