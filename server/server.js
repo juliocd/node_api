@@ -2,12 +2,20 @@
 
 var express = require('express');
 var bodyParser = require('body-parser');
+var sha256 = require('sha256');
 var fs = require('fs');
 var _ = require('lodash')
 var mysql = require('mysql');
 var cfg = require('../config');
+var jwt = require('jsonwebtoken');
 
 var app = express();
+
+//First Middleware
+// app.use(function(req, res, next){
+//     console.log("first mwre 2");
+//     next();
+// })
 
 //express.static will serve everything
 // with in client as a static resource
@@ -36,73 +44,140 @@ con.connect(function(err) {
     //     if (err) throw err;
     //     console.log("Database OK!");
     // });
-     /*con.query("CREATE TABLE IF NOT EXISTS users ( id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50) NOT NULL, last_name VARCHAR(50) NOT NULL, age INT(3), gender VARCHAR(1), username VARCHAR(50) NOT NULL, password VARCHAR(50) NOT NULL);", function (err, result) {
+     /*con.query("CREATE TABLE IF NOT EXISTS users ( id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50) NOT NULL, last_name VARCHAR(50) NOT NULL, age INT(3), gender VARCHAR(1), username VARCHAR(50) NOT NULL, password VARCHAR(120) NOT NULL);", function (err, result) {
          if (err) throw err;
          console.log("User table OK!");
      });*/
+     /*con.query("ALTER TABLE users MODIFY COLUMN password VARCHAR(120);", function (err, result) {
+        if (err) throw err;
+        console.log("User table OK!");
+    });*/
 });
 
 app.post('/user', function(req, res) {
     var user = req.body;
+    var jsonResponse = {
+        code : 200,
+        error : "",
+        data : null
+    };
 
     var sql = "INSERT INTO users (name, last_name, age, gender, username, password) " 
         + "VALUES ('" + user.name + "','" + user.last_name + "'," + user.age + ",'" 
         + user.gender + "','" + user.username + "','" + user.password + "')";
     con.query(sql, function (err, result) {
         if (err) {
-            res.send(err);
+            console.log("Error insering user. Desc: " + err);
+            jsonResponse.code = 404;
+            jsonResponse.error = err;
+        }else{
+            console.log("User inserted successfully with sql: " + sql);
+            user.id = result.insertId;
+            jsonResponse.data = user;
         }
-        console.log("user inserted");
-        user.id = result.insertId;
-        res.send(user);
+        res.send(jsonResponse);
     });
 });
 
 app.get('/users', function(req, res) {
-    var sql = "SELECT * FROM users";
-    con.query(sql, function (err, result) {
-        if (err) {
-            res.send(err);
+    jwt.verify(req.headers.token, cfg.secret_key, function(err, decoded) {
+        if(err){
+            res.status(403).send("Access forbidden.");
+        }else{
+            var sql = "SELECT * FROM users";
+            con.query(sql, function (err, result) {
+                if (err) {
+                    res.send(err);
+                }
+                console.log("Users: " + result);
+                res.send(result);
+            });
         }
-        console.log("Users: " + result);
-        res.send(result);
     });
+
+    //next(new Error('Ester errood'));
 });
 
 app.put('/user/:id', function(req, res){
-    var user = req.body;
 
-    var sql = "UPDATE users SET " 
-        + " name = '" + user.name + "',  "
-        + " last_name = '" + user.last_name + "', "
-        + " age = " + user.age + ", "
-        + " gender = '" + user.gender + "', "
-        + " username = '" + user.username + "', "
-        + " password = '" + user.password + "' WHERE id = " + req.params.id;
-    con.query(sql, function (err, result) {
-        if (err) {
-            res.send(err);
-        }
-        if(result.affectedRows == 1){
-            console.log("User updated");
-            user.id = req.params.id;
-            res.send(user);
+    jwt.verify(req.headers.token, cfg.secret_key, function(err, decoded) {
+        if(err){
+            res.status(403).send("Access forbidden.");
         }else{
-            console.log("User not found");
-            res.send({"error" : "User not found"});
+            var user = req.body;
+            
+            var sql = "UPDATE users SET " 
+                + " name = '" + user.name + "',  "
+                + " last_name = '" + user.last_name + "', "
+                + " age = " + user.age + ", "
+                + " gender = '" + user.gender + "', "
+                + " username = '" + user.username + "', "
+                + " password = '" + user.password + "' WHERE id = " + req.params.id;
+            con.query(sql, function (err, result) {
+                if (err) {
+                    res.send(err);
+                }
+                if(result.affectedRows == 1){
+                    console.log("User updated");
+                    user.id = req.params.id;
+                    res.send(user);
+                }else{
+                    console.log("User not found");
+                    res.send({"error" : "User not found"});
+                }
+            });
         }
     });
 });
 
 app.delete('/user/:id', function(req, res){
-    var sql = "DELETE FROM users WHERE id = " + req.params.id;
+    jwt.verify(req.headers.token, cfg.secret_key, function(err, decoded) {
+        if(err){
+            res.status(403).send("Access forbidden.");
+        }
+        else{
+            var sql = "DELETE FROM users WHERE id = " + req.params.id;
+            con.query(sql, function (err, result) {
+                if (err) {
+                    res.send(err);
+                }
+                console.log("User deleted");
+                res.send(result);
+            });
+        }
+    });
+})
+
+app.post('/signin', function(req, res) {
+    var user = req.body;
+    var jsonResponse = {
+        code : 200,
+        error : "",
+        data : null
+    };
+
+    var sql = "SELECT id, name, last_name, age, gender FROM users WHERE username = '" + user.username + "' AND password = '" + user.password + "';";
     con.query(sql, function (err, result) {
         if (err) {
-            res.send(err);
+            console.log("Error sign in user. Desc: " + err);
+            jsonResponse.code = 404;
+            jsonResponse.error = err;
+        }else{
+            if(result.length > 0){
+                var userData = result[0];
+                var token = jwt.sign(sha256(userData.id), cfg.secret_key);
+                console.log("User " + user.username + " signed in successfully");
+                jsonResponse.data = token;
+            }else{
+                jsonResponse.code = 202;
+            }
         }
-        console.log("User deleted");
-        res.send(result);
+        res.send(jsonResponse);
     });
+});
+
+app.get('/signout', function(req, res){
+    
 })
 
 /*var jsonData = {count: 12, message: 'hey'};
@@ -129,6 +204,13 @@ app.get('/data', function(req, res) {
   // send back a json response
   res.json(jsonData);
 });*/
+
+//Handler-error
+// app.use(function(err, req, res, next){
+//     console.log("Error ooooh!");
+//     console.error(err);
+//     next();
+// })
 
 // start server on port 3000
 var port = process.env.PORT || cfg.port;

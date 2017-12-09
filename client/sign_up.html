@@ -18,13 +18,13 @@
     
     <!-- Bootstrap core JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 
     <!-- Custom styles for this template -->
     <link href="narrow-jumbotron.css" rel="stylesheet">
 
     <!-- JS -->
     <script src="sign_up.js"></script>
+    <script src="/libs/sha256.js"></script>
   </head>
 
   <body>
@@ -36,7 +36,10 @@
             </div>
             <div aria-hidden="true" id="errorAlert" class="alert alert-danger collapse" role="alert">
                 Error saving user. Try later or <a href="index.html" class="alert-link" >contact us</a>.
-              </div>
+            </div>
+            <div aria-hidden="true" id="warningAlert" class="alert alert-warning collapse" role="alert">
+                <p id="warningMessage"></p>
+            </div>
             <form id="signUpForm">
                 <div class="form-row">
                     <div class="form-group col-md-6">

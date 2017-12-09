@@ -3,18 +3,21 @@ function Inicialization(){
 }
 
 function SignUp(){
+    $("#warningMessage").hide();
+    $("#errorAlert").hide();
+
     var user = {
         name: $("#inputName").val(),
         last_name: $("#inputLastname").val(),
         age: $("#inputAge").val(),
         gender: $("#selectGender").val(),
         username: $("#inputUsername").val(),
-        password: $("#inputPassword").val()
+        password: SHA256($("#inputPassword").val())
     };
 
     $.ajax({
-        //url: 'http://localhost:3000/user',
-        url: 'https://apinodeusers.herokuapp.com/user',
+        url: 'http://localhost:3000/user',
+        //url: 'https://apinodeusers.herokuapp.com/user',
         data: JSON.stringify(user),
         error: function(error) {
             $( "#errorAlert" ).show( "slow" );
@@ -24,8 +27,13 @@ function SignUp(){
             'Content-Type': 'application/json'
         },
         success: function(data) {
-            $("#buttonsContainer").hide();
-            $( "#successAlert" ).show( "slow" );
+            if(data.code == 200){
+                $("#buttonsContainer").hide();
+                $( "#successAlert" ).show( "slow" );
+            }else{
+                $( "#warningMessage" ).text(data.error);
+                $( "#warningAlert" ).show( "slow" );
+            }
         },
         type: 'POST'
      });

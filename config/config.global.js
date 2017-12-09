@@ -1,3 +1,3 @@
 var config = module.exports = {};
 
-//Define global variables
+config.secret_key = "ACLSDF#J3JNJU$43U45U3OL?ALL";
