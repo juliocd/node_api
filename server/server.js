@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 var fs = require('fs');
 var _ = require('lodash')
 var mysql = require('mysql');
+var cfg = require('../config');
 
 var app = express();
 
@@ -20,11 +21,11 @@ app.use(bodyParser.json());
 
 //Create database connection
 var con = mysql.createConnection({
-    host: "sql9.freemysqlhosting.net",
-    user: "sql9208893",
-    password: "d69M8DDdpz",
-    database: "sql9208893",
-    port: 3306
+    host: cfg.mysql.host,
+    user: cfg.mysql.user,
+    password: cfg.mysql.password,
+    database: cfg.mysql.database,
+    port: cfg.mysql.port
 });
 
 //Connect to database
@@ -130,7 +131,7 @@ app.get('/data', function(req, res) {
 });*/
 
 // start server on port 3000
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || cfg.port;
 app.listen(port, function(){
     console.log('Server running on http://localhost:', port)
 });

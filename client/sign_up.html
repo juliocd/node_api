@@ -15,16 +15,29 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    
+    <!-- Bootstrap core JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+
     <!-- Custom styles for this template -->
     <link href="narrow-jumbotron.css" rel="stylesheet">
+
+    <!-- JS -->
+    <script src="sign_up.js"></script>
   </head>
 
   <body>
-
     <div class="container">
       <main role="main">
             <h4 class="display-4">Sign up</h4>
-            <form>
+            <div aria-hidden="true" id="successAlert" class="alert alert-success collapse" role="alert">
+              User saved successfully. <a href="index.html" class="alert-link" >Go Home</a>
+            </div>
+            <div aria-hidden="true" id="errorAlert" class="alert alert-danger collapse" role="alert">
+                Error saving user. Try later or <a href="index.html" class="alert-link" >contact us</a>.
+              </div>
+            <form id="signUpForm">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                       <label for="inputName">Name</label>
@@ -58,7 +71,7 @@
                       <input type="password" class="form-control" id="inputPassword" placeholder="Lastname">
                     </div>
                 </div>
-                <div class="col-md-50 text-right"> 
+                <div class="col-md-50 text-right" id="buttonsContainer"> 
                     <a class="btn btn-outline-primary" href="index.html" role="button">Cancel</a>
                     <button class="btn btn-primary">Sign in</button>
                 </div>

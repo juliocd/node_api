@@ -16,7 +16,7 @@ function initialization(){
     
 function loadData(){
     $.ajax({
-        url: 'https://apinodeusers.herokuapp.com/users',
+        url: 'http://localhost:3000/users',
         error: function(error) {
             alert("Error getting users.")
         },
@@ -25,8 +25,7 @@ function loadData(){
             'Content-Type': 'application/json'
         },
         success: function(jsonResponse) {
-            usersTable.data = jsonResponse;
-            usersTable.reload();
+            usersTable.rows.add(jsonResponse).draw();
         },
         type: 'GET'
      });

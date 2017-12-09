@@ -13,17 +13,18 @@ function SignUp(){
     };
 
     $.ajax({
-        url: 'https://apinodeusers.herokuapp.com/user',
+        url: 'http://localhost:3000/user',
         data: JSON.stringify(user),
         error: function(error) {
-            alert("Error saving user.")
+            $( "#errorAlert" ).show( "slow" );
         },
         headers: {
             'Accept':'application/json', 
             'Content-Type': 'application/json'
         },
         success: function(data) {
-           alert("User saved successful.")
+            $("#buttonsContainer").hide();
+            $( "#successAlert" ).show( "slow" );
         },
         type: 'POST'
      });
@@ -31,8 +32,8 @@ function SignUp(){
     
 $(document).ready(function(){
     Inicialization();
-    $("#signInForm").on('submit', function(e) {
+    $("#signUpForm").on('submit', function(e) {
+        e.preventDefault(); // avoid to execute the actual submit of the form.
         SignUp();
-        return false;
     });
 });
