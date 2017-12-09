@@ -16,7 +16,8 @@ function initialization(){
     
 function loadData(){
     $.ajax({
-        url: 'http://localhost:3000/users',
+        //url: 'http://localhost:3000/users',
+        url: 'https://apinodeusers.herokuapp.com/users',
         error: function(error) {
             alert("Error getting users.")
         },
