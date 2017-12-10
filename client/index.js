@@ -8,7 +8,7 @@ function SignIn(){
     $( "#errorAlert" ).hide();
     $.ajax({
         //url: 'http://localhost:3000/signin',
-        url: 'https://apinodeusers.herokuapp.com/user',
+        url: 'https://apinodeusers.herokuapp.com/signin',
         data: JSON.stringify({username: $("#username").val(), password: SHA256($("#password").val())}),
         error: function(error) {
             $( "#errorAlert" ).show( "slow" );
