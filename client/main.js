@@ -23,10 +23,13 @@ function loadData(){
         },
         headers: {
             'Accept':'application/json', 
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'token': localStorage.getItem('auth')
         },
         success: function(jsonResponse) {
-            usersTable.rows.add(jsonResponse).draw();
+            if(jsonResponse.code == 200){
+                usersTable.rows.add(jsonResponse.data).draw();
+            }
         },
         type: 'GET'
      });

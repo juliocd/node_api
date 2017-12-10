@@ -7,8 +7,8 @@ function SignIn(){
     $( "#warningAlert" ).hide();
     $( "#errorAlert" ).hide();
     $.ajax({
-        url: 'http://localhost:3000/signin',
-        //url: 'https://apinodeusers.herokuapp.com/user',
+        //url: 'http://localhost:3000/signin',
+        url: 'https://apinodeusers.herokuapp.com/user',
         data: JSON.stringify({username: $("#username").val(), password: SHA256($("#password").val())}),
         error: function(error) {
             $( "#errorAlert" ).show( "slow" );
@@ -19,7 +19,8 @@ function SignIn(){
         },
         success: function(data) {
             if(data.code == 200){
-                window.location.href = "http://localhost:3000/main/" + data.data;
+                localStorage.setItem('auth', data.data.token);
+                window.location.href = "main.html";
             }else{
                 $( "#warningAlert" ).show( "slow" );
             }

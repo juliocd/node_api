@@ -2,20 +2,16 @@
 
 var express = require('express');
 var bodyParser = require('body-parser');
-var sha256 = require('sha256');
 var fs = require('fs');
-var _ = require('lodash')
-var mysql = require('mysql');
 var cfg = require('../config');
-var jwt = require('jsonwebtoken');
 
 var app = express();
 
-//First Middleware
-// app.use(function(req, res, next){
-//     console.log("first mwre 2");
-//     next();
-// })
+//Allow origin
+app.use(function(req, res, next){
+    res.header("Access-Control-Allow-Origin", "*");
+     next();
+})
 
 //express.static will serve everything
 // with in client as a static resource
@@ -27,76 +23,7 @@ app.use(express.static('client'));
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 
-//Create database connection
-var con = mysql.createConnection({
-    host: cfg.mysql.host,
-    user: cfg.mysql.user,
-    password: cfg.mysql.password,
-    database: cfg.mysql.database,
-    port: cfg.mysql.port
-});
-
-//Connect to database
-con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
-    // con.query("CREATE DATABASE IF NOT EXISTS api_user", function (err, result) {
-    //     if (err) throw err;
-    //     console.log("Database OK!");
-    // });
-     /*con.query("CREATE TABLE IF NOT EXISTS users ( id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50) NOT NULL, last_name VARCHAR(50) NOT NULL, age INT(3), gender VARCHAR(1), username VARCHAR(50) NOT NULL, password VARCHAR(120) NOT NULL);", function (err, result) {
-         if (err) throw err;
-         console.log("User table OK!");
-     });*/
-     /*con.query("ALTER TABLE users MODIFY COLUMN password VARCHAR(120);", function (err, result) {
-        if (err) throw err;
-        console.log("User table OK!");
-    });*/
-});
-
-app.post('/user', function(req, res) {
-    var user = req.body;
-    var jsonResponse = {
-        code : 200,
-        error : "",
-        data : null
-    };
-
-    var sql = "INSERT INTO users (name, last_name, age, gender, username, password) " 
-        + "VALUES ('" + user.name + "','" + user.last_name + "'," + user.age + ",'" 
-        + user.gender + "','" + user.username + "','" + user.password + "')";
-    con.query(sql, function (err, result) {
-        if (err) {
-            console.log("Error insering user. Desc: " + err);
-            jsonResponse.code = 404;
-            jsonResponse.error = err;
-        }else{
-            console.log("User inserted successfully with sql: " + sql);
-            user.id = result.insertId;
-            jsonResponse.data = user;
-        }
-        res.send(jsonResponse);
-    });
-});
-
-app.get('/users', function(req, res) {
-    jwt.verify(req.headers.token, cfg.secret_key, function(err, decoded) {
-        if(err){
-            res.status(403).send("Access forbidden.");
-        }else{
-            var sql = "SELECT * FROM users";
-            con.query(sql, function (err, result) {
-                if (err) {
-                    res.send(err);
-                }
-                console.log("Users: " + result);
-                res.send(result);
-            });
-        }
-    });
-
-    //next(new Error('Ester errood'));
-});
+require('../server/request.js')(app);//Module with the request routes
 
 app.put('/user/:id', function(req, res){
 
@@ -147,34 +74,6 @@ app.delete('/user/:id', function(req, res){
         }
     });
 })
-
-app.post('/signin', function(req, res) {
-    var user = req.body;
-    var jsonResponse = {
-        code : 200,
-        error : "",
-        data : null
-    };
-
-    var sql = "SELECT id, name, last_name, age, gender FROM users WHERE username = '" + user.username + "' AND password = '" + user.password + "';";
-    con.query(sql, function (err, result) {
-        if (err) {
-            console.log("Error sign in user. Desc: " + err);
-            jsonResponse.code = 404;
-            jsonResponse.error = err;
-        }else{
-            if(result.length > 0){
-                var userData = result[0];
-                var token = jwt.sign(sha256(userData.id), cfg.secret_key);
-                console.log("User " + user.username + " signed in successfully");
-                jsonResponse.data = token;
-            }else{
-                jsonResponse.code = 202;
-            }
-        }
-        res.send(jsonResponse);
-    });
-});
 
 app.get('/signout', function(req, res){
     
