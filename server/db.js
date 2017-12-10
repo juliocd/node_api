@@ -21,14 +21,14 @@ exports.connect = function (callback){
         //     if (err) throw err;
         //     console.log("Database OK!");
         // });
-        /*con.query("CREATE TABLE IF NOT EXISTS users ( id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50) NOT NULL, last_name VARCHAR(50) NOT NULL, age INT(3), gender VARCHAR(1), username VARCHAR(50) NOT NULL, password VARCHAR(120) NOT NULL);", function (err, result) {
-            if (err) throw err;
-            console.log("User table OK!");
-        });*/
-        con.query("ALTER TABLE users MODIFY COLUMN password VARCHAR(120);", function (err, result) {
-            if (err) throw err;
-            console.log("User table OK!");
-        });
+        // con.query("CREATE TABLE IF NOT EXISTS users ( id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50) NOT NULL, last_name VARCHAR(50) NOT NULL, age INT(3), gender VARCHAR(1), username VARCHAR(50) NOT NULL, password VARCHAR(120) NOT NULL);", function (err, result) {
+        //     if (err) throw err;
+        //     console.log("User table OK!");
+        // });
+        // con.query("ALTER TABLE users MODIFY COLUMN password VARCHAR(120);", function (err, result) {
+        //     if (err) throw err;
+        //     console.log("User table OK!");
+        // });
         return callback(con);
     });
 }

@@ -16,8 +16,8 @@ function SignUp(){
     };
 
     $.ajax({
-        url: 'http://localhost:3000/user',
-        //url: 'https://apinodeusers.herokuapp.com/user',
+        //url: 'http://localhost:3000/user',
+        url: 'https://apinodeusers.herokuapp.com/user',
         data: JSON.stringify(user),
         error: function(error) {
             $( "#errorAlert" ).show( "slow" );
