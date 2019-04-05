@@ -1,5 +1,7 @@
 var cfg = require('../config');
 var jwt = require('jsonwebtoken');
+const fs = require('fs');
+const path = require('path');
 var util = require('./util.js');
 // Here we import our Logger file and instantiate a logger object
 var logger = require("./logger").Logger;
@@ -13,7 +15,24 @@ module.exports = function (app){
     });
 
     app.post('/sms-notifications', function(req, res) {
-        logger.info("Input data", req.body);
+        try{
+            logger.info(">>>");
+            logger.info(JSON.stringify(req.body));
+            logger.info("<<<");
+            res.status(200).json('Success')
+        }catch(err){
+            logger.error("Error >>>");
+            logger.error(err);
+            logger.error("Error <<<");
+            res.status(500).json('Error')
+        }
+    });
+
+    app.get('/logs', function(req, res) {
+        const filename = path.join(__dirname, '..', 'logs', 'info.txt');
+        console.log(filename);
+        var contents = fs.readFileSync(filename, 'utf8');
+        res.status(200).send(contents)
     });
 
     app.get('/users', function(req, res) {
