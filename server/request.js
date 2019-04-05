@@ -17,11 +17,26 @@ module.exports = function (app){
     app.post('/sms-notifications', function(req, res) {
         try{
             logger.info("Body:>>>");
-            logger.info(JSON.stringify(req));
-            logger.info("Body:<<<<<");
             logger.info("************");
-            logger.info(JSON.stringify(req.body));
+            logger.info(JSON.stringify(req.headers));
             logger.info("<<<");
+            res.status(200).json('Success')
+        }catch(err){
+            logger.error("Error >>>");
+            logger.error(err);
+            logger.error("Error <<<");
+            res.status(500).json('Error')
+        }
+    });
+
+    app.post('/sns', function(req, res) {
+        try{
+            logger.info("Body:>>>");
+            logger.info(JSON.stringify(req.body));
+            logger.info("************");
+            logger.info(JSON.stringify(req.headers));
+            logger.info("<<<");
+            logger.info(JSON.stringify(req.rawHeaders));
             res.status(200).json('Success')
         }catch(err){
             logger.error("Error >>>");
