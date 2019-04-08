@@ -21,11 +21,10 @@ app.use(bodyParser.json())
 
     app.post('/sms-notifications', function(req, res) {
         try{
-            logger.info("Body:>>>");
-            logger.info("************");
-            logger.info(JSON.stringify(req.headers));
-            logger.info("<<<");
-            res.status(200).json('Success')
+            console.log(req.is('text/*'));
+            console.log(req.is('json'));
+            console.log('RB: ' + req.rawBody);
+            console.log('B: ' + JSON.stringify(req.body));
         }catch(err){
             logger.error("Error >>>");
             logger.error(err);
