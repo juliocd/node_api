@@ -23,7 +23,7 @@ module.exports = function (app){
         try{
             console.log(req.is('text/*'));
             console.log(req.is('json'));
-            console.log('B: ' + req.body);
+            console.log('B: ' + JSON.stringify(req.body));
             res.status(200).json('Success');
         }catch(err){
             logger.error("Error >>>");
@@ -33,7 +33,7 @@ module.exports = function (app){
         }
     });
 
-    app.post('/sns', function(req, res) {
+    app.post('/sns', bodyParser.json(), bodyParser.urlencoded({ extended: false }), function(req, res) {
         let body = ''
 
         req.on('data', (chunk) => {
