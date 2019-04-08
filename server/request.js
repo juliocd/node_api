@@ -3,10 +3,14 @@ var jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
 var util = require('./util.js');
+const bodyParser = require('body-parser')
 // Here we import our Logger file and instantiate a logger object
 var logger = require("./logger").Logger;
 
 module.exports = function (app){
+
+    app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
     app.post('/user', function(req, res) {
         var user = require(__dirname + '/services/user.js');
@@ -31,23 +35,36 @@ module.exports = function (app){
     });
 
     app.post('/sns', function(req, res) {
-        try{
-            if (req.get("x-amz-sns-message-type") == "SubscriptionConfirmation") {
-                logger.info("************");
-                logger.info("arn");
-                console.log(req.get("x-amz-sns-topic-arn"));
-                const subscribeUrl = req.body.SubscribeURL;
-                logger.info("************");
-                logger.info("subscribeUrl");
-                console.log(subscribeUrl);
-                console.log(req);
+        let body = ''
+
+        req.on('data', (chunk) => {
+            body += chunk.toString()
+        })
+
+        req.on('end', () => {
+            let payload = JSON.parse(body)
+
+            if (payload.Type === 'SubscriptionConfirmation') {
+                logger.error(">>>>" + payload.SubscribeURL);
+                console.log('payload', payload)
+            const promise = new Promise((resolve, reject) => {
+                const url = payload.SubscribeURL
+
+                request(url, (error, response) => {
+                if (!error && response.statusCode == 200) {
+                    console.log('Yess! We have accepted the confirmation from AWS')
+                    return resolve()
+                } else {
+                    return reject()
+                }
+                })
+            })
+
+            promise.then(() => {
+                res.end("ok")
+            })
             }
-        }catch(err){
-            logger.error("Error >>>");
-            logger.error(err);
-            logger.error("Error <<<");
-            res.status(500).json('Error')
-        }
+        })
     });
 
     app.get('/logs', function(req, res) {
