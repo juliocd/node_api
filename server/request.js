@@ -9,8 +9,8 @@ var logger = require("./logger").Logger;
 
 module.exports = function (app){
 
-    app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+//     app.use(bodyParser.urlencoded({ extended: false }))
+// app.use(bodyParser.json())
 
     app.post('/user', function(req, res) {
         var user = require(__dirname + '/services/user.js');
@@ -19,12 +19,12 @@ app.use(bodyParser.json())
 		});
     });
 
-    app.post('/sms-notifications', function(req, res) {
+    app.post('/sms-notifications', bodyParser.json(), bodyParser.urlencoded({ extended: false }), function(req, res) {
         try{
             console.log(req.is('text/*'));
             console.log(req.is('json'));
-            console.log('RB: ' + req.rawBody);
-            console.log('B: ' + JSON.stringify(req.body));
+            console.log('B: ' + req.body);
+            res.status(200).json('Success');
         }catch(err){
             logger.error("Error >>>");
             logger.error(err);
