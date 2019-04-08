@@ -30,22 +30,28 @@ module.exports = function (app){
 
             if (payload.Type === 'SubscriptionConfirmation') {
                 console.log('SubscribeURL', payload.SubscribeURL)
-            const promise = new Promise((resolve, reject) => {
-                const url = payload.SubscribeURL
+                const promise = new Promise((resolve, reject) => {
+                    const url = payload.SubscribeURL
 
-                request(url, (error, response) => {
-                if (!error && response.statusCode == 200) {
-                    console.log('Yess! We have accepted the confirmation from AWS')
-                    return resolve()
-                } else {
-                    return reject()
-                }
+                    request(url, (error, response) => {
+                    if (!error && response.statusCode == 200) {
+                        console.log('Yess! We have accepted the confirmation from AWS')
+                        return resolve()
+                    } else {
+                        return reject()
+                    }
+                    })
                 })
-            })
 
-            promise.then(() => {
-                res.end("ok")
-            })
+                promise.then(() => {
+                    res.status(200).json('Confiramtion success')
+                }).catch((err) => {
+                    console.log(err);
+                    res.status(500).json('Error confirmation')
+                });
+            }else{
+                console.log('payload', payload);
+                console.log('payloadStr', JSON.stringify(payload));
             }
         })
     });
