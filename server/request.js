@@ -7,6 +7,19 @@ var util = require('./util.js');
 var logger = require("./logger").Logger;
 
 module.exports = function (app){
+
+    app.use(function (req, res, next) {
+        if (req.get('x-amz-sns-message-type')) {
+            logger.info("Update content-type");
+        req.headers['content-type'] = 'application/json';
+        }
+        next();
+      });
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb',
+    extended: false
+}));
+
     app.post('/user', function(req, res) {
         var user = require(__dirname + '/services/user.js');
 		user.save(req.body, function(response){
