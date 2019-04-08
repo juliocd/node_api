@@ -10,7 +10,7 @@ module.exports = function (app){
 
     app.use(function (req, res, next) {
         if (req.get('x-amz-sns-message-type')) {
-            logger.info("Update content-type");
+            console.log("Update type")
         req.headers['content-type'] = 'application/json';
         }
         next();
@@ -52,6 +52,7 @@ app.use(bodyParser.urlencoded({limit: '50mb',
                 logger.info("************");
                 logger.info("subscribeUrl");
                 console.log(subscribeUrl);
+                console.log(req);
             }
         }catch(err){
             logger.error("Error >>>");
