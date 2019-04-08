@@ -7,11 +7,9 @@ const bodyParser = require('body-parser')
 // Here we import our Logger file and instantiate a logger object
 var logger = require("./logger").Logger;
 var Promise = require('promise');
+const request = require('request');
 
 module.exports = function (app){
-
-//     app.use(bodyParser.urlencoded({ extended: false }))
-// app.use(bodyParser.json())
 
     app.post('/user', function(req, res) {
         var user = require(__dirname + '/services/user.js');
@@ -31,8 +29,7 @@ module.exports = function (app){
             let payload = JSON.parse(body)
 
             if (payload.Type === 'SubscriptionConfirmation') {
-                logger.error(">>>>" + payload.SubscribeURL);
-                console.log('payload', payload)
+                console.log('SubscribeURL', payload.SubscribeURL)
             const promise = new Promise((resolve, reject) => {
                 const url = payload.SubscribeURL
 
@@ -80,10 +77,33 @@ module.exports = function (app){
             })
 
             promise.then(() => {
-                res.end("ok")
+                res.status(200).json('Success')
             })
             }
         })
+    });
+
+    app.post('/send-confirmation', function(req, res) {
+
+        let url = req.body.subscribeURL;
+        console.log('url', url)
+        const promise = new Promise((resolve, reject) => {
+            request(url, (error, response) => {
+                if (!error && response.statusCode == 200) {
+                    console.log('Yess! We have accepted the confirmation from AWS')
+                    return resolve()
+                } else {
+                    console.log(error)
+                    return reject()
+                }
+            })
+        });
+        promise.then(() => {
+            res.status(200).json('Confiramtion success')
+        }).catch((err) => {
+            console.log(err);
+            res.status(500).json('Error success')
+        });
     });
 
     app.get('/logs', function(req, res) {
