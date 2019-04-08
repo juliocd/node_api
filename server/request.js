@@ -31,13 +31,15 @@ module.exports = function (app){
 
     app.post('/sns', function(req, res) {
         try{
-            logger.info("Body:>>>");
-            logger.info(JSON.stringify(req.body));
-            logger.info("************");
-            logger.info(JSON.stringify(req.headers));
-            logger.info("<<<");
-            logger.info(JSON.stringify(req.rawHeaders));
-            res.status(200).json('Success')
+            if (req.get("x-amz-sns-message-type") == "SubscriptionConfirmation") {
+                logger.info("************");
+                logger.info("arn");
+                console.log(req.get("x-amz-sns-topic-arn"));
+                const subscribeUrl = req.body.SubscribeURL;
+                logger.info("************");
+                logger.info("subscribeUrl");
+                console.log(subscribeUrl);
+            }
         }catch(err){
             logger.error("Error >>>");
             logger.error(err);
