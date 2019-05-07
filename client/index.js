@@ -1,5 +1,9 @@
 function Inicialization(){
-
+    $(".IBV").fancybox({
+        'width': '60%',
+        'height': '70%',
+        'fancybox-skin': 'background: white'
+    }); 
 }
 
 function SignIn(){

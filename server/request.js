@@ -1,3 +1,4 @@
+//NODE_ENV=development ./node_modules/nodemon/bin/nodemon.js server/server.js
 var cfg = require('../config');
 var jwt = require('jsonwebtoken');
 const fs = require('fs');
