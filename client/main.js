@@ -4,7 +4,7 @@ function initialization(){
     usersTable = $('#usersTable').DataTable( {
         columns: [
             { data: "name", title: "Name" },
-            { data: "last_name", title: "Lastname" },
+            { data: "last_name", title: "LastName" },
             { data: "age", title: "Age" },
             { data: "gender", title: "Gender" },
             { data: "username", title: "Username" }
